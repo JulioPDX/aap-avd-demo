@@ -16,20 +16,28 @@ topology:
     nodes:
         htft-spine1:
             mgmt-ipv4: 172.16.2.11
+            startup-config: ./intended/configs/htft-spine1.cfg
             ports:
-              - 8441:443
+              - 192.168.33.61:8441:443
+              - 127.0.0.1:8441:443
         htft-spine2:
             mgmt-ipv4: 172.16.2.12
+            startup-config: ./intended/configs/htft-spine2.cfg
             ports:
-              - 8442:443
+              - 192.168.33.61:8442:443
+              - 127.0.0.1:8442:443
         htft-leaf1a:
             mgmt-ipv4: 172.16.2.101
+            startup-config: ./intended/configs/htft-leaf1a.cfg
             ports:
-              - 8443:443
+              - 192.168.33.61:8443:443
+              - 127.0.0.1:8443:443
         htft-leaf1b:
             mgmt-ipv4: 172.16.2.102
+            startup-config: ./intended/configs/htft-leaf1b.cfg
             ports:
-              - 8444:443
+              - 192.168.33.61:8444:443
+              - 127.0.0.1:8444:443
 
     links:
     # spines to a/b leafs
