@@ -1,0 +1,35 @@
+---
+name: AVD-AAP
+prefix: ""
+
+mgmt:
+    ipv4-subnet: 172.16.2.0/24
+
+topology:
+    kinds:
+        arista_ceos:
+            image: ceos:4.35.1F
+            env:
+              CLAB_MGMT_VRF: MGMT
+    defaults:
+        kind: arista_ceos
+    nodes:
+        htft-spine1:
+            mgmt-ipv4: 172.16.2.11
+        htft-spine2:
+            mgmt-ipv4: 172.16.2.12
+        htft-leaf1a:
+            mgmt-ipv4: 172.16.2.101
+        htft-leaf1b:
+            mgmt-ipv4: 172.16.2.102
+
+    links:
+    # spines to a/b leafs
+    - endpoints: ["htft-spine1:eth1", "htft-leaf1a:eth1"]
+    - endpoints: ["htft-spine1:eth2", "htft-leaf1b:eth1"]
+    - endpoints: ["htft-spine2:eth1", "htft-leaf1a:eth2"]
+    - endpoints: ["htft-spine2:eth2", "htft-leaf1b:eth2"]
+
+    # leaf a/b peer-links
+    - endpoints: ["htft-leaf1a:eth3", "htft-leaf1b:eth3"]
+    - endpoints: ["htft-leaf1a:eth4", "htft-leaf1b:eth4"]
