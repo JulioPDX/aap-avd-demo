@@ -16,12 +16,20 @@ topology:
     nodes:
         htft-spine1:
             mgmt-ipv4: 172.16.2.11
+            ports:
+              - 8441:443
         htft-spine2:
             mgmt-ipv4: 172.16.2.12
+            ports:
+              - 8442:443
         htft-leaf1a:
             mgmt-ipv4: 172.16.2.101
+            ports:
+              - 8443:443
         htft-leaf1b:
             mgmt-ipv4: 172.16.2.102
+            ports:
+              - 8444:443
 
     links:
     # spines to a/b leafs
