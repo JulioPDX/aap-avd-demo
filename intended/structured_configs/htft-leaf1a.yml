@@ -32,6 +32,16 @@ ethernet_interfaces:
   peer_type: spine
   switchport:
     enabled: false
+- name: Ethernet2
+  description: P2P_htft-spine2_Ethernet1
+  shutdown: false
+  mtu: 9214
+  ip_address: 10.255.255.3/31
+  peer: htft-spine2
+  peer_interface: Ethernet1
+  peer_type: spine
+  switchport:
+    enabled: false
 hostname: htft-leaf1a
 ip_domain_lookup:
   source_interfaces:
@@ -170,6 +180,11 @@ router_bgp:
     remote_as: '65100'
     peer: htft-spine1
     description: htft-spine1_Ethernet1
+  - ip_address: 10.255.255.2
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65100'
+    peer: htft-spine2
+    description: htft-spine2_Ethernet1
   - ip_address: 10.255.0.1
     peer_group: EVPN-OVERLAY-PEERS
     remote_as: '65100'
