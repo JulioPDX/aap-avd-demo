@@ -1,3 +1,0 @@
-anta.tests.system:
-  - VerifyUptime:
-      minimum: 1

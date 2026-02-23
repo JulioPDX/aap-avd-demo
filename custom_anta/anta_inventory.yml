@@ -1,5 +1,0 @@
-anta_inventory:
-  hosts:
-    - host: 172.16.2.11
-      name: htft-spine1
-      tags: [test]
