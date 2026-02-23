@@ -24,9 +24,9 @@ l3leaf:
       nodes:
         - name: htft-leaf1a
           id: 1
-          mgmt_ip: 10.90.231.179/24
+          mgmt_ip: 192.168.0.103/24
           uplink_switch_interfaces: [Ethernet1, Ethernet1] # (12)!
         - name: htft-leaf1b
           id: 2
-          mgmt_ip: 10.90.231.180/24
+          mgmt_ip: 192.168.0.104/24
           uplink_switch_interfaces: [Ethernet2, Ethernet2]

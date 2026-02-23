@@ -28,10 +28,9 @@ hostname: htft-spine2
 ip_domain_lookup:
   source_interfaces:
   - name: Management1
-    vrf: MGMT
 ip_name_servers:
 - ip_address: 1.1.1.1
-  vrf: MGMT
+  vrf: default
 ip_routing: true
 local_users:
 - name: admin
@@ -50,15 +49,14 @@ loopback_interfaces:
 management_api_http:
   enable_https: true
   enable_vrfs:
-  - name: MGMT
+  - name: default
 management_interfaces:
 - name: Management1
   description: OOB_MANAGEMENT
   shutdown: false
-  vrf: MGMT
-  ip_address: 10.90.231.178/24
+  vrf: default
+  ip_address: 192.168.0.102/24
   type: oob
-  gateway: 10.90.231.1
 metadata:
   is_deployed: true
   platform: vEOS-lab
@@ -66,11 +64,11 @@ metadata:
 ntp:
   local_interface:
     name: Management1
-    vrf: MGMT
+    vrf: default
   servers:
   - name: 0.pool.ntp.org
     preferred: true
-    vrf: MGMT
+    vrf: default
 prefix_lists:
 - name: PL-LOOPBACKS-EVPN-OVERLAY
   sequence_numbers:
@@ -150,10 +148,6 @@ router_bgp:
 service_routing_protocols_model: multi-agent
 spanning_tree:
   mode: none
-static_routes:
-- vrf: MGMT
-  prefix: 0.0.0.0/0
-  next_hop: 10.90.231.1
 transceiver_qsfp_default_mode_4x10: true
 vlan_internal_order:
   allocation: ascending
@@ -161,5 +155,5 @@ vlan_internal_order:
     beginning: 1006
     ending: 1199
 vrfs:
-- name: MGMT
+- name: default
   ip_routing: false

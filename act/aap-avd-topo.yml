@@ -1,0 +1,49 @@
+veos:
+  # Define the global vEOS node parameters
+  username: arista
+  password: arista
+  version: 4.34.3M
+
+# List of ACT nodes
+nodes:
+  - htft-spine1:
+      ip_addr: 192.168.0.101
+      node_type: veos
+      internet_access: true
+
+  - htft-spine2:
+      ip_addr: 192.168.0.102
+      node_type: veos
+      internet_access: true
+
+  - htft-leaf1a:
+      ip_addr: 192.168.0.103
+      node_type: veos
+      internet_access: true
+
+  - htft-leaf1b:
+      ip_addr: 192.168.0.104
+      node_type: veos
+      internet_access: true
+
+links:
+  # spine to leaf
+    - connection:
+        - htft-spine1:Ethernet1
+        - htft-leaf1a:Ethernet1
+    - connection:
+        - htft-spine1:Ethernet2
+        - htft-leaf1b:Ethernet1
+    - connection:
+        - htft-spine2:Ethernet1
+        - htft-leaf1a:Ethernet2
+    - connection:
+        - htft-spine2:Ethernet2
+        - htft-leaf1b:Ethernet2
+    # leaf to leaf
+    - connection:
+        - htft-leaf1a:Ethernet3
+        - htft-leaf1b:Ethernet3
+    - connection:
+        - htft-leaf1a:Ethernet4
+        - htft-leaf1b:Ethernet4

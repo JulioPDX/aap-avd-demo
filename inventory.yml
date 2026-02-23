@@ -8,12 +8,12 @@ all:
             HTFT_SPINES:
               hosts:
                 htft-spine1:
-                  ansible_host: 10.90.231.177
+                  ansible_host: 10.18.134.209
                 htft-spine2:
-                  ansible_host: 10.90.231.178
+                  ansible_host: 10.18.134.227
             HTFT_LEAFS:
               hosts:
                 htft-leaf1a:
-                  ansible_host: 10.90.231.179
+                  ansible_host: 10.18.134.194
                 htft-leaf1b:
-                  ansible_host: 10.90.231.180
+                  ansible_host: 10.18.134.226

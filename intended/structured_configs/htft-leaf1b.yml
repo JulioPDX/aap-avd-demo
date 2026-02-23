@@ -46,12 +46,11 @@ hostname: htft-leaf1b
 ip_domain_lookup:
   source_interfaces:
   - name: Management1
-    vrf: MGMT
 ip_igmp_snooping:
   globally_enabled: true
 ip_name_servers:
 - ip_address: 1.1.1.1
-  vrf: MGMT
+  vrf: default
 ip_routing: true
 ip_virtual_router_mac_address: 00:1c:73:00:00:99
 local_users:
@@ -75,15 +74,14 @@ loopback_interfaces:
 management_api_http:
   enable_https: true
   enable_vrfs:
-  - name: MGMT
+  - name: default
 management_interfaces:
 - name: Management1
   description: OOB_MANAGEMENT
   shutdown: false
-  vrf: MGMT
-  ip_address: 10.90.231.180/24
+  vrf: default
+  ip_address: 192.168.0.104/24
   type: oob
-  gateway: 10.90.231.1
 metadata:
   is_deployed: true
   platform: vEOS-lab
@@ -98,11 +96,11 @@ mlag_configuration:
 ntp:
   local_interface:
     name: Management1
-    vrf: MGMT
+    vrf: default
   servers:
   - name: 0.pool.ntp.org
     preferred: true
-    vrf: MGMT
+    vrf: default
 port_channel_interfaces:
 - name: Port-Channel3
   description: MLAG_htft-leaf1a_Port-Channel3
@@ -219,10 +217,6 @@ spanning_tree:
   - id: '0'
     priority: 4096
   no_spanning_tree_vlan: 4093-4094
-static_routes:
-- vrf: MGMT
-  prefix: 0.0.0.0/0
-  next_hop: 10.90.231.1
 transceiver_qsfp_default_mode_4x10: true
 vlan_interfaces:
 - name: Vlan4093
@@ -253,7 +247,7 @@ vlans:
   - MLAG
   tenant: system
 vrfs:
-- name: MGMT
+- name: default
   ip_routing: false
 vxlan_interface:
   vxlan1:
