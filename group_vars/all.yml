@@ -86,3 +86,5 @@ ntp_settings:
   server_vrf: use_mgmt_interface_vrf
   servers:
     - name: 0.pool.ntp.org
+
+mgmt_gateway: 10.90.231.1

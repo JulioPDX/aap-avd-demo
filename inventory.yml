@@ -8,16 +8,12 @@ all:
             HTFT_SPINES:
               hosts:
                 htft-spine1:
-                  ansible_host: 192.168.33.61
-                  ansible_httpapi_port: 8441
+                  ansible_host: 10.90.231.177
                 htft-spine2:
-                  ansible_host: 192.168.33.61
-                  ansible_httpapi_port: 8442
+                  ansible_host: 10.90.231.178
             HTFT_LEAFS:
               hosts:
                 htft-leaf1a:
-                  ansible_host: 192.168.33.61
-                  ansible_httpapi_port: 8443
+                  ansible_host: 10.90.231.179
                 htft-leaf1b:
-                  ansible_host: 192.168.33.61
-                  ansible_httpapi_port: 8444
+                  ansible_host: 10.90.231.180

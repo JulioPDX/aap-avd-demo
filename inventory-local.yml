@@ -1,0 +1,23 @@
+---
+all:
+  children:
+    FABRIC:
+      children:
+        HTFT: # How-To Fabric Topology
+          children:
+            HTFT_SPINES:
+              hosts:
+                htft-spine1:
+                  ansible_host: 192.168.33.61
+                  ansible_httpapi_port: 8441
+                htft-spine2:
+                  ansible_host: 192.168.33.61
+                  ansible_httpapi_port: 8442
+            HTFT_LEAFS:
+              hosts:
+                htft-leaf1a:
+                  ansible_host: 192.168.33.61
+                  ansible_httpapi_port: 8443
+                htft-leaf1b:
+                  ansible_host: 192.168.33.61
+                  ansible_httpapi_port: 8444
