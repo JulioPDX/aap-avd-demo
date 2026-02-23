@@ -2,12 +2,12 @@
 # validate.yml
 
 - name: Test configuration
-  hosts: htft-spine1
+  hosts: FABRIC
   gather_facts: false
   vars:
     avd_catalogs_enabled: false
     anta_runner_timeout: 15
-    # root_dir: "{{ playbook_dir }}"
+    root_dir: "{{ playbook_dir }}"
   tasks:
     - name: Validate the network
       ansible.builtin.import_role:
