@@ -18,9 +18,14 @@ dependencies:
       - name: arista.avd
         version: 5.7.3
 
+additional_build_files:
+    - src: ansible.cfg
+      dest: configs
+
 additional_build_steps:
     prepend_final:
         - RUN /usr/bin/dnf -y swap curl-minimal curl
+        - COPY _build/configs/ansible.cfg /etc/ansible/ansible.cfg
 
 options:
     package_manager_path: /usr/bin/dnf
