@@ -6,6 +6,7 @@
   gather_facts: false
   vars:
     avd_catalogs_enabled: false
+    anta_runner_timeout: 15
   tasks:
     - name: Generate AVD Structured Configurations and Fabric Documentation
       ansible.builtin.import_role:
