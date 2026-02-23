@@ -15,28 +15,22 @@
 
 | Total Tests | ✅&nbsp;Success | ⏭️&nbsp;Skipped | ❌&nbsp;Failure | ❗&nbsp;Error |
 | :- | :- | :- | :- | :- |
-| 4 | 4 | 0 | 0 | 0 |
+| 1 | 1 | 0 | 0 | 0 |
 
 ### 🔌 Summary Totals Device Under Test <a id="summary-totals-device-under-test"></a>
 
 | Device | Total Tests | ✅&nbsp;Success | ⏭️&nbsp;Skipped | ❌&nbsp;Failure | ❗&nbsp;Error | Categories Skipped | Categories Failed |
 | :- | :- | :- | :- | :- | :- | :- | :- |
-| **htft-leaf1a** | 1 | 1 | 0 | 0 | 0 | - | - |
-| **htft-leaf1b** | 1 | 1 | 0 | 0 | 0 | - | - |
 | **htft-spine1** | 1 | 1 | 0 | 0 | 0 | - | - |
-| **htft-spine2** | 1 | 1 | 0 | 0 | 0 | - | - |
 
 ### 🗂️ Summary Totals Per Category <a id="summary-totals-per-category"></a>
 
 | Test Category | Total Tests | ✅&nbsp;Success | ⏭️&nbsp;Skipped | ❌&nbsp;Failure | ❗&nbsp;Error |
 | :- | :- | :- | :- | :- | :- |
-| **Configuration** | 4 | 4 | 0 | 0 | 0 |
+| **Configuration** | 1 | 1 | 0 | 0 | 0 |
 
 ## 🧪 Test Results <a id="test-results"></a>
 
 | Device | Categories | Test | Description | Custom Field | Result | Messages |
 | :- | :- | :- | :- | :- | :- | :- |
-| htft-leaf1a | Configuration | VerifyZeroTouch | Verifies ZeroTouch is disabled. | - | ✅&nbsp;Success | - |
-| htft-leaf1b | Configuration | VerifyZeroTouch | Verifies ZeroTouch is disabled. | - | ✅&nbsp;Success | - |
 | htft-spine1 | Configuration | VerifyZeroTouch | Verifies ZeroTouch is disabled. | - | ✅&nbsp;Success | - |
-| htft-spine2 | Configuration | VerifyZeroTouch | Verifies ZeroTouch is disabled. | - | ✅&nbsp;Success | - |

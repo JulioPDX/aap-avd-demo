@@ -7,8 +7,9 @@
   vars:
     avd_catalogs_enabled: false
     anta_runner_timeout: 15
-    # user_catalogs_dir: "{{ anta_dir }}/{{ user_catalogs_dir_name }}/interfaces/"
+    structured_dir: "{{ playbook_dir }}/intended/structured_configs"
+    anta_catalogs: "{{ playbook_dir }}/anta/user_catalog/zero-touch.yml"
   tasks:
-    - name: Generate AVD Structured Configurations and Fabric Documentation
+    - name: Validate the network
       ansible.builtin.import_role:
         name: arista.avd.anta_runner
