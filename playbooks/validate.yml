@@ -11,3 +11,5 @@
     - name: Generate AVD Structured Configurations and Fabric Documentation
       ansible.builtin.import_role:
         name: arista.avd.anta_runner
+      delegate_to: localhost
+      # run_once: true
