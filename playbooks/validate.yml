@@ -8,6 +8,14 @@
     avd_catalogs_enabled: false
     anta_runner_timeout: 15
   tasks:
+    - name: check stuff
+      command: ls -R .
+      register: ls_output
+
+    - name: print stuff
+      debug:
+        msg: "{{ ls_output.stdout_lines }}"
+
     - name: Generate AVD Structured Configurations and Fabric Documentation
       ansible.builtin.import_role:
         name: arista.avd.anta_runner
