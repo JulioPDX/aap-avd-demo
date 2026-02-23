@@ -2,10 +2,10 @@
 # validate.yml
 
 - name: Test configuration
-  hosts: all
+  hosts: FABRIC
   gather_facts: false
   vars:
-    # avd_catalogs_enabled: false
+    avd_catalogs_enabled: false
     anta_runner_timeout: 15
   tasks:
     - name: Generate AVD Structured Configurations and Fabric Documentation

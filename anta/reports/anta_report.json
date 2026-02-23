@@ -1,6 +1,42 @@
 [
     {
+        "name": "htft-leaf1a",
+        "test": "VerifyZeroTouch",
+        "categories": [
+            "configuration"
+        ],
+        "description": "Verifies ZeroTouch is disabled.",
+        "result": "success",
+        "messages": [],
+        "atomic_results": [],
+        "custom_field": null
+    },
+    {
+        "name": "htft-leaf1b",
+        "test": "VerifyZeroTouch",
+        "categories": [
+            "configuration"
+        ],
+        "description": "Verifies ZeroTouch is disabled.",
+        "result": "success",
+        "messages": [],
+        "atomic_results": [],
+        "custom_field": null
+    },
+    {
         "name": "htft-spine1",
+        "test": "VerifyZeroTouch",
+        "categories": [
+            "configuration"
+        ],
+        "description": "Verifies ZeroTouch is disabled.",
+        "result": "success",
+        "messages": [],
+        "atomic_results": [],
+        "custom_field": null
+    },
+    {
+        "name": "htft-spine2",
         "test": "VerifyZeroTouch",
         "categories": [
             "configuration"

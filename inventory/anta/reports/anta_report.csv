@@ -1,2 +1,0 @@
-Device,Test Name,Test Status,Message(s),Test description,Test category
-htft-spine1,VerifyZeroTouch,success,,Verifies ZeroTouch is disabled.,Configuration
