@@ -7,6 +7,7 @@
   vars:
     avd_catalogs_enabled: false
     anta_runner_timeout: 15
+    anta_runner_dry_run: true
     root_dir: "{{ playbook_dir }}"
   tasks:
     - name: Validate the network
