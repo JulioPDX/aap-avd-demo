@@ -2,7 +2,7 @@
 # validate.yml
 
 - name: Test configuration
-  hosts: htft-spine1
+  hosts: FABRIC
   gather_facts: false
   vars:
     avd_catalogs_enabled: false
