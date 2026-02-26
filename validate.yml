@@ -19,6 +19,7 @@
           - gh_user != ""
           - gh_token != ""
         fail_msg: "GitHub credentials are missing! Please attach the 'GitHub Automation Token' credential to this job."
+        delegate_to: localhost
 
     - name: Validate the network
       ansible.builtin.import_role:
@@ -30,6 +31,8 @@
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
       args:
         chdir: "{{ playbook_dir }}"
+      delegate_to: localhost
+      run_once: true
 
     - name: Check if there are changes in the reports directory
       ansible.builtin.shell: "git status --porcelain {{ report_path }}"
@@ -37,6 +40,8 @@
       args:
         chdir: "{{ playbook_dir }}"
       changed_when: false
+      delegate_to: localhost
+      run_once: true
 
     - name: Prepare branch, commit, and push
       # This block handles the "does it exist?" logic natively in Git
@@ -50,6 +55,8 @@
       when: report_status.stdout != ""
       no_log: true
       register: git_push_result
+      delegate_to: localhost
+      run_once: true
 
     - name: Final Report | Summary of actions
       ansible.builtin.debug:
@@ -59,3 +66,5 @@
           {% else %}
           Successfully pushed updated reports to branch '{{ git_branch }}'.
           {% endif %}
+      delegate_to: localhost
+      run_once: true
