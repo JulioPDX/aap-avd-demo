@@ -4,6 +4,8 @@
 - name: Validate the network
   hosts: FABRIC
   gather_facts: false
+  vars:
+    anta_catalogs_enabled: false
   tasks:
     - name: Validate the network
       ansible.builtin.import_role:
