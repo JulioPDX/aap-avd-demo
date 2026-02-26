@@ -26,15 +26,39 @@
     gh_token: "{{ lookup('env', 'GITHUB_TOKEN') }}"
 
   tasks:
+    - name: Clean up any old temporary directory
+      ansible.builtin.file:
+        path: "{{ temp_repo_path }}"
+        state: absent
+
     - name: Create temporary directory
       ansible.builtin.file:
         path: "{{ temp_repo_path }}"
-        state: absent # Clean up any old runs first
+        state: directory
+        mode: '0755'
 
     - name: Clone repo for pushing
-      ansible.builtin.shell: >
-        git clone https://{{ gh_user | urlencode }}:{{ gh_token | urlencode }}@{{ git_repo_url }} {{ temp_repo_path }}
+      ansible.builtin.git:
+        repo: "https://{{ gh_user }}:{{ gh_token }}@{{ git_repo_url }}"
+        dest: "{{ temp_repo_path }}"
+        version: "{{ git_branch }}"
+        clone: true
+        update: false
+        accept_hostkey: true
       no_log: true
+      register: git_clone
+      failed_when: false  # Branch might not exist yet
+
+    - name: Clone from main if branch doesn't exist
+      ansible.builtin.git:
+        repo: "https://{{ gh_user }}:{{ gh_token }}@{{ git_repo_url }}"
+        dest: "{{ temp_repo_path }}"
+        version: main
+        clone: true
+        update: true
+        accept_hostkey: true
+      no_log: true
+      when: git_clone.failed | default(false)
 
     - name: Configure Git identity in temp repo
       ansible.builtin.shell: |
@@ -43,17 +67,23 @@
       args:
         chdir: "{{ temp_repo_path }}"
 
-    - name: Checkout or Create target branch
+    - name: Checkout or create target branch
       ansible.builtin.shell: |
-        git checkout {{ git_branch }} || git checkout -b {{ git_branch }}
+        git checkout {{ git_branch }} 2>/dev/null || git checkout -b {{ git_branch }}
       args:
         chdir: "{{ temp_repo_path }}"
+
+    - name: Ensure anta/reports directory exists in temp repo
+      ansible.builtin.file:
+        path: "{{ temp_repo_path }}/anta/reports"
+        state: directory
+        mode: '0755'
 
     - name: Copy generated reports to temp repo
       ansible.builtin.copy:
         src: "{{ local_report_path }}/"
         dest: "{{ temp_repo_path }}/anta/reports/"
-        remote_src: yes
+        remote_src: true
 
     - name: Check for changes
       ansible.builtin.shell: "git status --porcelain"
@@ -62,17 +92,28 @@
         chdir: "{{ temp_repo_path }}"
       changed_when: false
 
-    - name: Commit and Push
+    - name: Commit and push changes
       ansible.builtin.shell: |
         git add .
-        git commit -m "ANTA Report Update - Job {{ tower_job_id | default('manual') }}"
+        git commit -m "ANTA Report Update - Job {{ tower_job_id | default('manual') }} - $(date -u +%Y-%m-%dT%H:%M:%SZ)"
         git push origin {{ git_branch }}
       args:
         chdir: "{{ temp_repo_path }}"
       when: git_status.stdout != ""
       no_log: true
+      register: git_push
 
-    - name: Cleanup
+    - name: Display results
+      ansible.builtin.debug:
+        msg: >
+          {% if git_status.stdout == "" %}
+          No changes detected in ANTA reports - nothing to commit.
+          {% else %}
+          ANTA reports successfully pushed to branch '{{ git_branch }}'.
+          View at: https://{{ git_repo_url | replace('.git', '') }}/tree/{{ git_branch }}/anta/reports
+          {% endif %}
+
+    - name: Cleanup temporary directory
       ansible.builtin.file:
         path: "{{ temp_repo_path }}"
         state: absent
