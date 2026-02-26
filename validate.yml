@@ -6,6 +6,11 @@
   gather_facts: false
   vars:
     anta_catalogs_enabled: false
+    # Override the default paths to use playbook_dir instead of inventory_dir
+    # This is needed for AAP where project files are in /runner/project/
+    root_dir: "{{ playbook_dir }}"
+    structured_dir: "{{ playbook_dir }}/intended/structured_configs"
+    anta_dir: "{{ playbook_dir }}/anta"
   tasks:
     - name: Validate the network
       ansible.builtin.import_role:
