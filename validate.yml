@@ -6,7 +6,7 @@
   gather_facts: false
   vars:
     anta_catalogs_enabled: false
-    # root_dir: "{{ playbook_dir }}"
+    root_dir: "{{ playbook_dir }}"
   tasks:
     - name: Validate the network
       ansible.builtin.import_role:
