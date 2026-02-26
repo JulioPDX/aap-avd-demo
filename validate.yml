@@ -8,7 +8,7 @@
     avd_catalogs_enabled: false
     root_dir: "{{ playbook_dir }}"
     git_repo_url: "github.com/JulioPDX/aap-avd-demo.git"
-    git _branch: "anta_results"
+    git_branch: "anta_results"
     report_path: "anta/reports"
     gh_user: "{{ lookup('env', 'GITHUB_USER') }}"
     gh_token: "{{ lookup('env', 'GITHUB_TOKEN') }}"
