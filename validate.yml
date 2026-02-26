@@ -6,10 +6,56 @@
   gather_facts: false
   vars:
     avd_catalogs_enabled: false
-    anta_runner_timeout: 15
-    anta_runner_dry_run: true
     root_dir: "{{ playbook_dir }}"
+    git_repo_url: "github.com/JulioPDX/aap-avd-demo.git"
+    git _branch: "anta_results"
+    report_path: "anta/reports"
+    gh_user: "{{ lookup('env', 'GITHUB_USER') }}"
+    gh_token: "{{ lookup('env', 'GITHUB_TOKEN') }}"
   tasks:
+    - name: Pre-check | Ensure GitHub credentials are provided
+      ansible.builtin.assert:
+        that:
+          - gh_user != ""
+          - gh_token != ""
+        fail_msg: "GitHub credentials are missing! Please attach the 'GitHub Automation Token' credential to this job."
+
     - name: Validate the network
       ansible.builtin.import_role:
         name: arista.avd.anta_runner
+
+    - name: Ensure Git identity is set to the bot
+      ansible.builtin.shell: |
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      args:
+        chdir: "{{ playbook_dir }}"
+
+    - name: Check if there are changes in the reports directory
+      ansible.builtin.shell: "git status --porcelain {{ report_path }}"
+      register: report_status
+      args:
+        chdir: "{{ playbook_dir }}"
+      changed_when: false
+
+    - name: Prepare branch, commit, and push
+      # This block handles the "does it exist?" logic natively in Git
+      ansible.builtin.shell: |
+        git checkout -b {{ git_branch }} || git checkout {{ git_branch }}
+        git add {{ report_path }}
+        git commit -m "ANTA Report Update - Job {{ tower_job_id | default('manual') }}"
+        git push -u https://{{ gh_user | urlencode }}:{{ gh_token | urlencode }}@{{ git_repo_url }} {{ git_branch }}
+      args:
+        chdir: "{{ playbook_dir }}"
+      when: report_status.stdout != ""
+      no_log: true
+      register: git_push_result
+
+    - name: Final Report | Summary of actions
+      ansible.builtin.debug:
+        msg: >-
+          {% if report_status.stdout == "" %}
+          No changes detected in {{ report_path }}. Repository is up to date.
+          {% else %}
+          Successfully pushed updated reports to branch '{{ git_branch }}'.
+          {% endif %}
