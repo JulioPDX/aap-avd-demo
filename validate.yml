@@ -1,71 +1,76 @@
 ---
 # validate.yml
 
-- name: Test configuration
+- name: Validate the network
   hosts: FABRIC
   gather_facts: false
-  vars:
-    avd_catalogs_enabled: false
-    root_dir: "{{ playbook_dir }}"
-    git_repo_url: "github.com/JulioPDX/aap-avd-demo.git"
-    git_branch: "anta_results"
-    report_path: "anta/reports"
-    gh_user: "{{ lookup('env', 'GITHUB_USER') }}"
-    gh_token: "{{ lookup('env', 'GITHUB_TOKEN') }}"
   tasks:
-    - name: Pre-check | Ensure GitHub credentials are provided
-      ansible.builtin.assert:
-        that:
-          - gh_user != ""
-          - gh_token != ""
-        fail_msg: "GitHub credentials are missing! Please attach the 'GitHub Automation Token' credential to this job."
-      delegate_to: localhost
-      run_once: true
-
     - name: Validate the network
       ansible.builtin.import_role:
         name: arista.avd.anta_runner
 
-    - name: Ensure Git identity is set to the bot
+- name: Phase 2 - Push Reports to GitHub
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    git_repo_url: "github.com/JulioPDX/aap-avd-demo.git"
+    git_branch: "anta_results"
+    # This is where your reports were generated in Phase 1
+    local_report_path: "{{ playbook_dir }}/anta/reports"
+    # Temporary location for the git operations
+    temp_repo_path: "/tmp/anta_update"
+    gh_user: "{{ lookup('env', 'GITHUB_USER') }}"
+    gh_token: "{{ lookup('env', 'GITHUB_TOKEN') }}"
+
+  tasks:
+    - name: Create temporary directory
+      ansible.builtin.file:
+        path: "{{ temp_repo_path }}"
+        state: absent # Clean up any old runs first
+
+    - name: Clone repo for pushing
+      ansible.builtin.shell: >
+        git clone https://{{ gh_user | urlencode }}:{{ gh_token | urlencode }}@{{ git_repo_url }} {{ temp_repo_path }}
+      no_log: true
+
+    - name: Configure Git identity in temp repo
       ansible.builtin.shell: |
         git config user.name "github-actions[bot]"
-        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config user.email "bot@aap.local"
       args:
-        chdir: "{{ playbook_dir }}"
-      delegate_to: localhost
-      run_once: true
+        chdir: "{{ temp_repo_path }}"
 
-    - name: Check if there are changes in the reports directory
-      ansible.builtin.shell: "git status --porcelain {{ report_path }}"
-      register: report_status
-      args:
-        chdir: "{{ playbook_dir }}"
-      changed_when: false
-      delegate_to: localhost
-      run_once: true
-
-    - name: Prepare branch, commit, and push
-      # This block handles the "does it exist?" logic natively in Git
+    - name: Checkout or Create target branch
       ansible.builtin.shell: |
-        git checkout -b {{ git_branch }} || git checkout {{ git_branch }}
-        git add {{ report_path }}
-        git commit -m "ANTA Report Update - Job {{ tower_job_id | default('manual') }}"
-        git push -u https://{{ gh_user | urlencode }}:{{ gh_token | urlencode }}@{{ git_repo_url }} {{ git_branch }}
+        git checkout {{ git_branch }} || git checkout -b {{ git_branch }}
       args:
-        chdir: "{{ playbook_dir }}"
-      when: report_status.stdout != ""
-      no_log: true
-      register: git_push_result
-      delegate_to: localhost
-      run_once: true
+        chdir: "{{ temp_repo_path }}"
 
-    - name: Final Report | Summary of actions
-      ansible.builtin.debug:
-        msg: >-
-          {% if report_status.stdout == "" %}
-          No changes detected in {{ report_path }}. Repository is up to date.
-          {% else %}
-          Successfully pushed updated reports to branch '{{ git_branch }}'.
-          {% endif %}
-      delegate_to: localhost
-      run_once: true
+    - name: Copy generated reports to temp repo
+      ansible.builtin.copy:
+        src: "{{ local_report_path }}/"
+        dest: "{{ temp_repo_path }}/anta/reports/"
+        remote_src: yes
+
+    - name: Check for changes
+      ansible.builtin.shell: "git status --porcelain"
+      register: git_status
+      args:
+        chdir: "{{ temp_repo_path }}"
+      changed_when: false
+
+    - name: Commit and Push
+      ansible.builtin.shell: |
+        git add .
+        git commit -m "ANTA Report Update - Job {{ tower_job_id | default('manual') }}"
+        git push origin {{ git_branch }}
+      args:
+        chdir: "{{ temp_repo_path }}"
+      when: git_status.stdout != ""
+      no_log: true
+
+    - name: Cleanup
+      ansible.builtin.file:
+        path: "{{ temp_repo_path }}"
+        state: absent
