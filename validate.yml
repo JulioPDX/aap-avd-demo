@@ -85,33 +85,25 @@
         dest: "{{ temp_repo_path }}/anta/reports/"
         remote_src: true
 
-    - name: Check for changes
-      ansible.builtin.shell: "git status --porcelain"
-      register: git_status
-      args:
-        chdir: "{{ temp_repo_path }}"
-      changed_when: false
-
     - name: Commit and push changes
       ansible.builtin.shell: |
         git add .
-        git commit -m "ANTA Report Update - Job {{ tower_job_id | default('manual') }} - $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+        git commit --allow-empty -m "ANTA Report Update - AAP Job #{{ tower_job_id | default('manual') }} - $(date -u +%Y-%m-%dT%H:%M:%SZ)"
         git push origin {{ git_branch }}
       args:
         chdir: "{{ temp_repo_path }}"
-      when: git_status.stdout != ""
       no_log: true
       register: git_push
+      retries: 3
+      delay: 5
+      until: git_push is succeeded
 
     - name: Display results
       ansible.builtin.debug:
-        msg: >
-          {% if git_status.stdout == "" %}
-          No changes detected in ANTA reports - nothing to commit.
-          {% else %}
-          ANTA reports successfully pushed to branch '{{ git_branch }}'.
-          View at: https://{{ git_repo_url | replace('.git', '') }}/tree/{{ git_branch }}/anta/reports
-          {% endif %}
+        msg: |
+          ✅ ANTA reports pushed to branch '{{ git_branch }}'
+          📊 View reports at: https://{{ git_repo_url | replace('.git', '') }}/tree/{{ git_branch }}/anta/reports
+          🔖 Job ID: {{ tower_job_id | default('manual') }}
 
     - name: Cleanup temporary directory
       ansible.builtin.file:
