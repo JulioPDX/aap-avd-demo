@@ -17,7 +17,7 @@
         name: arista.avd.anta_runner
       ignore_errors: true
 
-- name: Phase 2 - Push Reports to GitHub
+- name: Push Reports to GitHub
   hosts: localhost
   connection: local
   gather_facts: false
