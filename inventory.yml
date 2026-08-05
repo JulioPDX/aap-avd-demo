@@ -3,17 +3,17 @@ all:
   children:
     FABRIC:
       children:
-        HTFT: # How-To Fabric Topology
+        DC1:
           children:
-            HTFT_SPINES:
+            SPINES:
               hosts:
-                htft-spine1:
-                  ansible_host: 10.18.134.209
-                htft-spine2:
-                  ansible_host: 10.18.134.227
-            HTFT_LEAFS:
+                spine1:
+                  ansible_host: 10.18.152.68
+                spine2:
+                  ansible_host: 10.18.152.72
+            LEAFS:
               hosts:
-                htft-leaf1a:
-                  ansible_host: 10.18.134.194
-                htft-leaf1b:
-                  ansible_host: 10.18.134.226
+                leaf1a:
+                  ansible_host: 10.18.152.65
+                leaf1b:
+                  ansible_host: 10.18.152.66

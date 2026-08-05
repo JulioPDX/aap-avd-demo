@@ -4,21 +4,16 @@
 ansible_connection: ansible.netcommon.httpapi
 # Specifies that we are indeed using Arista EOS
 ansible_network_os: arista.eos.eos
-# This user/password must exist on the switches to enable Ansible access
-ansible_user: arista
-ansible_password: arista
 # User escalation (to enter enable mode)
 ansible_become: true
 ansible_become_method: enable
 ansible_httpapi_use_ssl: true
 ansible_httpapi_validate_certs: false
-# ansible_ssh_common_args: '-o ProxyCommand="ssh -W %h:%p -q juliopdx@192.168.33.61"'
-
 
 custom_platform_settings:
   - platforms:
-      - cEOS-lab
-    management_interface: Management0
+      - vEOS-lab
+    management_interface: Management1
 
 # Common AVD group variables
 fabric_name: FABRIC
@@ -32,20 +27,6 @@ eos_cli_config_gen_documentation:
 # Define underlay and overlay routing protocol to be used
 underlay_routing_protocol: ebgp
 overlay_routing_protocol: ebgp
-
-# Local users
-aaa_settings:
-  local_users:
-    # Username with no password configured
-    - name: admin
-      privilege: 15
-      sha512_password: "$6$T4cuLcb/q.RtNIuR$H5LTfLpzLeKOv0dU7YILqQxy3G9AWnx0mILm22RumdvdUZ.Lj4PcXkP4V1aBy63Z7kggXLQAy2o4HrfpSYhSg0"
-      no_password: true
-    # Username with a password
-    - name: arista
-      privilege: 15
-      role: network-admin
-      sha512_password: "$6$Enl0WfE32FthwyiJ$yTyGaEJ2uPKLU.F7314YtB7J1jrzrMi7ogXIRTEHQfLdLgKWWmr1UvNlZLN6AyuxET7G5aH3AI9OYRzxVTkB1."
 
 # BGP peer groups passwords
 bgp_peer_groups:
@@ -88,3 +69,14 @@ ntp_settings:
     - name: 0.pool.ntp.org
 
 mgmt_interface_vrf: default
+
+cv_settings:
+  onprem_clusters:
+    - name: main
+      servers:
+        - name: 192.168.0.5
+
+terminattr:
+  ingestexclude: /Sysdb/cell/1/agent,/Sysdb/cell/2/agent
+  disable_aaa: true
+

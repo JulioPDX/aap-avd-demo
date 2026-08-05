@@ -1,0 +1,18 @@
+---
+# Fabric Topology How-To Guide
+# Spine configuration
+type: spine
+
+spine:
+  defaults:
+    platform: vEOS-lab
+    loopback_ipv4_pool: 10.255.0.0/27
+    bgp_as: 65100
+
+  nodes:
+    - name: spine1
+      id: 1
+      mgmt_ip: 192.168.0.101/24
+    - name: spine2
+      id: 2
+      mgmt_ip: 192.168.0.102/24
