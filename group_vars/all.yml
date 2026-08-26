@@ -12,8 +12,8 @@ ansible_httpapi_validate_certs: false
 
 custom_platform_settings:
   - platforms:
-      - vEOS-lab
-    management_interface: Management1
+      - cEOS-lab
+    management_interface: Management0
 
 # Common AVD group variables
 fabric_name: FABRIC
@@ -43,19 +43,12 @@ default_interfaces:
   - types: [spine]
     platforms: [default]
     uplink_interfaces: [Ethernet1-2]
-    downlink_interfaces: [Ethernet1-8]
+    downlink_interfaces: [Ethernet2-8]
   - types: [l3leaf]
     platforms: [default]
-    uplink_interfaces: [Ethernet1, Ethernet2]
-    mlag_interfaces: [Ethernet3-4]
+    uplink_interfaces: [Ethernet2, Ethernet3]
+    mlag_interfaces: [Ethernet1, Ethernet6]
     downlink_interfaces: [Ethernet8]
-  - types: [service_leaf]
-    platforms: [default]
-    uplink_interfaces: [Ethernet1]
-    downlink_interfaces: [Ethernet8]
-  - types: [l2leaf]
-    platforms: [default]
-    uplink_interfaces: [Ethernet1-2]
 
 # DNS Server
 dns_settings:
@@ -70,13 +63,15 @@ ntp_settings:
 
 mgmt_interface_vrf: default
 
-cv_settings:
-  onprem_clusters:
-    - name: main
-      servers:
-        - name: 192.168.0.5
-
-terminattr:
-  ingestexclude: /Sysdb/cell/1/agent,/Sysdb/cell/2/agent
-  disable_aaa: true
-
+custom_structured_configuration_eos_cli: |
+    username admin privilege 15 role network-admin secret 5 $1$5O85YVVn$HrXcfOivJEnISTMb6xrJc.
+    username arista privilege 15 role network-admin secret 5 $1$4VjIjfd1$XkUVulbNDESHFzcxDU.Tk1
+    username arista ssh-key ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCrdG/8H6s9aEZM3KlnGOG1ir6fGBvBLwuYgFHW2Lq6xkRHgVAu4cLEUHqzl7TzQsdWoih8FZnzgDH3UzK6v3kaDd4FycydpjI0IXQ9+q1Rw9JDa5B0CyvTkoaE5xbwDZQ14+6X4Q8WVrCc2fn7gSYYyBFY7hd+qsb4aH8ezsEqR4OssP+0N1+6xJdlepK/ry0+scOUeaB2d5JLuOpnveN4AkOXrKdRymM2jh95eI8XhpcHjD0JqwHo5/RtOGFL+VVRe+QW8BGpUIFYHggpVGfxz0qFL/y2B/cdrs6oDEs9kLeG86tWT1+ZoMf0SYB3658aS1ba1TQcTNmQw18ArxsB arista@aap-demo-1-6d679806-eos
+    !
+    management api http-commands
+      no shutdown
+    !
+    daemon TerminAttr
+      exec /usr/bin/TerminAttr -cvcompression=gzip -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent -cvaddr=192.168.0.5:9910 -cvauth=token,/tmp/token -cvvrf=default -taillogs -disableaaa
+      no shutdown
+    !

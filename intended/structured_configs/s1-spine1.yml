@@ -1,75 +1,65 @@
 aaa_root:
   disabled: true
 config_end: true
-daemon_terminattr:
-  cvaddrs:
-  - 192.168.0.5:9910
-  cvauth:
-    method: token
-    token_file: /tmp/token
-  cvsourceintf: Management1
-  cvvrf: default
-  disable_aaa: false
-  smashexcludes: ale,flexCounter,hardware,kni,pulse,strata
 enable_password:
   disabled: true
+eos_cli: "username admin privilege 15 role network-admin secret 5 $1$5O85YVVn$HrXcfOivJEnISTMb6xrJc.\nusername arista privilege 15 role
+  network-admin secret 5 $1$4VjIjfd1$XkUVulbNDESHFzcxDU.Tk1\nusername arista ssh-key ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCrdG/8H6s9aEZM3KlnGOG1ir6fGBvBLwuYgFHW2Lq6xkRHgVAu4cLEUHqzl7TzQsdWoih8FZnzgDH3UzK6v3kaDd4FycydpjI0IXQ9+q1Rw9JDa5B0CyvTkoaE5xbwDZQ14+6X4Q8WVrCc2fn7gSYYyBFY7hd+qsb4aH8ezsEqR4OssP+0N1+6xJdlepK/ry0+scOUeaB2d5JLuOpnveN4AkOXrKdRymM2jh95eI8XhpcHjD0JqwHo5/RtOGFL+VVRe+QW8BGpUIFYHggpVGfxz0qFL/y2B/cdrs6oDEs9kLeG86tWT1+ZoMf0SYB3658aS1ba1TQcTNmQw18ArxsB
+  arista@aap-demo-1-6d679806-eos\n!\nmanagement api http-commands\n  no shutdown\n!\ndaemon TerminAttr\n  exec /usr/bin/TerminAttr -cvcompression=gzip
+  -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent -cvaddr=192.168.0.5:9910
+  -cvauth=token,/tmp/token -cvvrf=default -taillogs -disableaaa\n  no shutdown\n!"
 ethernet_interfaces:
-- name: Ethernet1
-  description: P2P_leaf1a_Ethernet1
+- name: Ethernet2
+  description: P2P_s1-leaf1_Ethernet2
   shutdown: false
   mtu: 9214
   ip_address: 10.255.255.0/31
   metadata:
-    peer: leaf1a
-    peer_interface: Ethernet1
+    peer: s1-leaf1
+    peer_interface: Ethernet2
     peer_type: l3leaf
   switchport:
     enabled: false
-- name: Ethernet2
-  description: P2P_leaf1b_Ethernet1
+- name: Ethernet3
+  description: P2P_s1-leaf2_Ethernet2
   shutdown: false
   mtu: 9214
   ip_address: 10.255.255.4/31
   metadata:
-    peer: leaf1b
-    peer_interface: Ethernet1
+    peer: s1-leaf2
+    peer_interface: Ethernet2
     peer_type: l3leaf
   switchport:
     enabled: false
-hostname: spine1
+hostname: s1-spine1
 ip_domain_lookup:
   source_interfaces:
-  - name: Management1
+  - name: Management0
 ip_name_server:
   vrfs:
   - name: default
     servers:
     - ip_address: 1.1.1.1
 ip_routing: true
-local_users:
-- name: juliopdx
-  privilege: 15
-  role: network-admin
-  sha512_password: $6$bffcbd4ac46142d1$3KgTzO9ZpOWk9cCz9W/EOg5cOafoord7FyyLkPOFdld1l5wh.R1y0fWcqv6D73mKuKh6bmLWmhBZy.QEiZOyw/
 loopback_interfaces:
 - name: Loopback0
   description: ROUTER_ID
   shutdown: false
   ip_address: 10.255.0.1/32
 management_interfaces:
-- name: Management1
+- name: Management0
   description: OOB_MANAGEMENT
   shutdown: false
   vrf: default
-  ip_address: 192.168.0.101/24
+  ip_address: 192.168.0.10/24
   type: oob
 metadata:
   is_deployed: true
-  platform: vEOS-lab
+  platform: cEOS-lab
   fabric_name: FABRIC
 ntp:
   local_interface:
-    name: Management1
+    name: Management0
     vrf: default
   servers:
   - name: 0.pool.ntp.org
@@ -124,26 +114,26 @@ router_bgp:
     peer_group: IPv4-UNDERLAY-PEERS
     remote_as: '65101'
     metadata:
-      peer: leaf1a
-    description: leaf1a_Ethernet1
+      peer: s1-leaf1
+    description: s1-leaf1_Ethernet2
   - ip_address: 10.255.255.5
     peer_group: IPv4-UNDERLAY-PEERS
     remote_as: '65101'
     metadata:
-      peer: leaf1b
-    description: leaf1b_Ethernet1
+      peer: s1-leaf2
+    description: s1-leaf2_Ethernet2
   - ip_address: 10.255.0.3
     peer_group: EVPN-OVERLAY-PEERS
     remote_as: '65101'
     metadata:
-      peer: leaf1a
-    description: leaf1a_Loopback0
+      peer: s1-leaf1
+    description: s1-leaf1_Loopback0
   - ip_address: 10.255.0.4
     peer_group: EVPN-OVERLAY-PEERS
     remote_as: '65101'
     metadata:
-      peer: leaf1b
-    description: leaf1b_Loopback0
+      peer: s1-leaf2
+    description: s1-leaf2_Loopback0
   redistribute:
     connected:
       enabled: true

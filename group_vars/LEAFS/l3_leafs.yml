@@ -5,11 +5,11 @@ type: l3leaf
 
 l3leaf:
   defaults:
-    platform: vEOS-lab
+    platform: cEOS-lab
     loopback_ipv4_pool: 10.255.0.0/27
     loopback_ipv4_offset: 2
     vtep_loopback_ipv4_pool: 10.255.1.0/27
-    uplink_switches: [spine1, spine2]
+    uplink_switches: [s1-spine1, s1-spine2]
     uplink_ipv4_pool: 10.255.255.0/26
     mlag_peer_ipv4_pool: 10.255.1.64/27
     mlag_peer_l3_ipv4_pool: 10.255.1.96/27
@@ -21,11 +21,11 @@ l3leaf:
     - group: LEAF1
       bgp_as: 65101
       nodes:
-        - name: leaf1a
+        - name: s1-leaf1
           id: 1
-          mgmt_ip: 192.168.0.103/24
-          uplink_switch_interfaces: [Ethernet1, Ethernet1]
-        - name: leaf1b
-          id: 2
-          mgmt_ip: 192.168.0.104/24
+          mgmt_ip: 192.168.0.12/24
           uplink_switch_interfaces: [Ethernet2, Ethernet2]
+        - name: s1-leaf2
+          id: 2
+          mgmt_ip: 192.168.0.13/24
+          uplink_switch_interfaces: [Ethernet3, Ethernet3]
