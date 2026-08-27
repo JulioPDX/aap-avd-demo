@@ -5,6 +5,8 @@
   hosts: FABRIC
   gather_facts: false
   tasks:
+  vars_files:
+    - ../group_vars/vault.yml
 
     - name: Generate AVD Structured Configurations and Fabric Documentation
       ansible.builtin.import_role:
