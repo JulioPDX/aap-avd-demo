@@ -1,6 +1,4 @@
 ---
-# build.yml
-
 - name: Build Configurations and Documentation
   hosts: FABRIC
   gather_facts: false
