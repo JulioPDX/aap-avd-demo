@@ -3,15 +3,12 @@ version: 3
 
 images:
   base_image:
-    name: registry.fedoraproject.org/fedora:40
+    name: ghcr.io/ansible-community/community-ee-minimal:2.21.3-1
 
 dependencies:
   python_interpreter:
-    package_system: python311
-    python_path: /usr/bin/python3.11
-
-  ansible_core:
-    package_pip: ansible-core<2.21.0
+    package_system: python314
+    python_path: /usr/bin/python3.14
 
   ansible_runner:
     package_pip: ansible-runner
