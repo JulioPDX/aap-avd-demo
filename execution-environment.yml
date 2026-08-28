@@ -10,9 +10,6 @@ dependencies:
     package_system: python314
     python_path: /usr/bin/python3.14
 
-  ansible_runner:
-    package_pip: ansible-runner
-
   galaxy: requirements.yml
 
   python: requirements.txt
