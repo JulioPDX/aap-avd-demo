@@ -66,7 +66,7 @@ mgmt_interface_vrf: default
 custom_structured_configuration_eos_cli: |
     username admin privilege 15 role network-admin secret 5 $1$5O85YVVn$HrXcfOivJEnISTMb6xrJc.
     username arista privilege 15 role network-admin secret 5 $1$4VjIjfd1$XkUVulbNDESHFzcxDU.Tk1
-    username arista ssh-key ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCrdG/8H6s9aEZM3KlnGOG1ir6fGBvBLwuYgFHW2Lq6xkRHgVAu4cLEUHqzl7TzQsdWoih8FZnzgDH3UzK6v3kaDd4FycydpjI0IXQ9+q1Rw9JDa5B0CyvTkoaE5xbwDZQ14+6X4Q8WVrCc2fn7gSYYyBFY7hd+qsb4aH8ezsEqR4OssP+0N1+6xJdlepK/ry0+scOUeaB2d5JLuOpnveN4AkOXrKdRymM2jh95eI8XhpcHjD0JqwHo5/RtOGFL+VVRe+QW8BGpUIFYHggpVGfxz0qFL/y2B/cdrs6oDEs9kLeG86tWT1+ZoMf0SYB3658aS1ba1TQcTNmQw18ArxsB arista@aap-demo-1-6d679806-eos
+    username arista ssh-key ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCcZwfprWqjmV/igls7bQuEkSXqUDQDjR7mEpgwujqvb5W8n7kwFjbG1D/0GNfZVAQjulGgbcH0CfO5lvMVjpsZk1oqz0Gz13IL81+r/C+O5h/2dCZbXr7TUZd4g6Ny3kRgBqpWo7GTYIJybSRrmG0kNrM+Dpl5ZPlf5uG8jpByBA5m/EBPoas6JxIaM0B17+R+tgVD9p9ppHbGn4QOmzmP19O/xALfvShNiFt0SMcD21arVoIYbTMqKVOK7LlTY8Zcy2C939F4aNFePyEFEbO5h6Xx/VQPfqUBk8CkymgQDAcAurn9zeMYTY8+0PYQdEk1BL6nuXEIgm9nX7ZoLZ4n arista@aap-demo-1-083b8912-eos
     !
     management api http-commands
       no shutdown

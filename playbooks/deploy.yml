@@ -18,5 +18,5 @@
       ansible.builtin.import_role:
         name: arista.avd.cv_deploy
       vars:
-        cv_server: aap-demo-1-6d679806-eos.topo.testdrive.arista.com
+        cv_server: aap-demo-1-083b8912-eos.topo.testdrive.arista.com
         cv_run_change_control: true
