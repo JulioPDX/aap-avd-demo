@@ -1,5 +1,5 @@
 ---
-- name: Build and Deploy configuration
+- name: Build and Deploy configurations
   hosts: FABRIC
   gather_facts: false
   vars_files:
