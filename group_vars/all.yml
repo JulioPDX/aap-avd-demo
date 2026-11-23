@@ -20,9 +20,9 @@ fabric_name: FABRIC
 
 # Disable documentation generation
 eos_designs_documentation:
-  enable: false
+  enable: true
 eos_cli_config_gen_documentation:
-  enable: false
+  enable: true
 
 # Define underlay and overlay routing protocol to be used
 underlay_routing_protocol: ebgp
