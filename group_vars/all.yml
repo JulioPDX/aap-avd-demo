@@ -63,15 +63,20 @@ ntp_settings:
 
 mgmt_interface_vrf: default
 
+cv_settings:
+  onprem_clusters:
+    - name: main
+      servers:
+        - name: 192.168.0.5
+  terminattr:
+    ingestexclude: /Sysdb/cell/1/agent,/Sysdb/cell/2/agent
+    disable_aaa: true
+
+management_eapi:
+  enabled: true
+
 custom_structured_configuration_eos_cli: |
     username admin privilege 15 role network-admin secret 5 $1$5O85YVVn$HrXcfOivJEnISTMb6xrJc.
     username arista privilege 15 role network-admin secret 5 $1$4VjIjfd1$XkUVulbNDESHFzcxDU.Tk1
     username arista ssh-key ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC0w+pDAIPjxt7GadeDTXWoZJfncqbYWA4gVdn68YD/HcEC6Jii7fX4B2P27AKuzhzCDOSht2f2nmm/rdlQZmPuysGbrSKsJR6eTcLOzbYuXtaVCcBgbB8Y8ur5GJrjaeIeurvOm75V0WqKsn1dYVMrtEbRcQcbgu42/AKyvuimJunWP1TfKSwrF99tUHXEWktQCoKwn5pIc1gPE3F+U73MrGQsqe2/jvH7XR0C9qpjrMQNqj/jCO+lefjLHMe497jUT5aBSLyBrVSyBcqymtJ2LTLnO48vSuw+mHIqQZIaA0P0GO4yDNkWe/lsSs5TH137XAE3pVdhnvL6WLvqHUHZ arista@aap-avd-1-d555df96-eos
-    !
-    management api http-commands
-      no shutdown
-    !
-    daemon TerminAttr
-      exec /usr/bin/TerminAttr -cvcompression=gzip -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent -cvaddr=192.168.0.5:9910 -cvauth=token,/tmp/token -cvvrf=default -taillogs -disableaaa
-      no shutdown
     !

@@ -7,8 +7,11 @@
   - [IP Name Servers](#ip-name-servers)
   - [Domain Lookup](#domain-lookup)
   - [NTP](#ntp)
+  - [Management API HTTP](#management-api-http)
 - [Authentication](#authentication)
   - [Enable Password](#enable-password)
+- [Monitoring](#monitoring)
+  - [TerminAttr Daemon](#terminattr-daemon)
 - [MLAG](#mlag)
   - [MLAG Summary](#mlag-summary)
   - [MLAG Device Configuration](#mlag-device-configuration)
@@ -127,11 +130,56 @@ ntp local-interface Management0
 ntp server 0.pool.ntp.org prefer
 ```
 
+### Management API HTTP
+
+#### Management API HTTP Summary
+
+| HTTP | HTTPS | UNIX-Socket | Default Services | Session Timeout |
+| ---- | ----- | ----------- | ---------------- | --------------- |
+| False | True | - | - | 1440 minutes |
+
+#### Management API VRF Access
+
+| VRF Name | IPv4 ACL | IPv6 ACL |
+| -------- | -------- | -------- |
+| default | - | - |
+
+#### Management API HTTP Device Configuration
+
+```eos
+!
+management api http-commands
+   protocol https
+   no shutdown
+   !
+   vrf default
+      no shutdown
+```
+
 ## Authentication
 
 ### Enable Password
 
 Enable password has been disabled
+
+## Monitoring
+
+### TerminAttr Daemon
+
+#### TerminAttr Daemon Summary
+
+| CV Compression | CloudVision Servers | VRF | Authentication | Smash Excludes | Sysdb Excludes | Ingest Exclude | Bypass AAA |
+| -------------- | ------------------- | --- | -------------- | -------------- | -------------- | -------------- | ---------- |
+| gzip | 192.168.0.5:9910 | default | token,/tmp/token | ale,flexCounter,hardware,kni,pulse,strata | /Sysdb/cell/1/agent,/Sysdb/cell/2/agent | - | True |
+
+#### TerminAttr Daemon Device Configuration
+
+```eos
+!
+daemon TerminAttr
+   exec /usr/bin/TerminAttr -cvaddr=192.168.0.5:9910 -cvauth=token,/tmp/token -cvvrf=default -disableaaa -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent -taillogs -cvsourceintf=Management0
+   no shutdown
+```
 
 ## MLAG
 
@@ -645,13 +693,6 @@ route-map RM-MLAG-PEER-IN permit 10
 username admin privilege 15 role network-admin secret 5 $1$5O85YVVn$HrXcfOivJEnISTMb6xrJc.
 username arista privilege 15 role network-admin secret 5 $1$4VjIjfd1$XkUVulbNDESHFzcxDU.Tk1
 username arista ssh-key ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC0w+pDAIPjxt7GadeDTXWoZJfncqbYWA4gVdn68YD/HcEC6Jii7fX4B2P27AKuzhzCDOSht2f2nmm/rdlQZmPuysGbrSKsJR6eTcLOzbYuXtaVCcBgbB8Y8ur5GJrjaeIeurvOm75V0WqKsn1dYVMrtEbRcQcbgu42/AKyvuimJunWP1TfKSwrF99tUHXEWktQCoKwn5pIc1gPE3F+U73MrGQsqe2/jvH7XR0C9qpjrMQNqj/jCO+lefjLHMe497jUT5aBSLyBrVSyBcqymtJ2LTLnO48vSuw+mHIqQZIaA0P0GO4yDNkWe/lsSs5TH137XAE3pVdhnvL6WLvqHUHZ arista@aap-avd-1-d555df96-eos
-!
-management api http-commands
-  no shutdown
-!
-daemon TerminAttr
-  exec /usr/bin/TerminAttr -cvcompression=gzip -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent -cvaddr=192.168.0.5:9910 -cvauth=token,/tmp/token -cvvrf=default -taillogs -disableaaa
-  no shutdown
 !
 
 ```
